@@ -24,9 +24,10 @@ function ModuleCrudler({ endpoint }) {
   //View
   return (
     <>
-      <Modal>
-        <p>This is a modal!</p>
+      <Modal title={"Add new module"}>
+        <ModuleForm onCancel={handleCancel} onSuccess={handleSuccess} />
       </Modal>
+
       {!showForm && (
         <Action.Tray>
           <Action.Add

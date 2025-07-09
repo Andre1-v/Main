@@ -1,6 +1,6 @@
 import "./Modal.scss";
 
-function Modal({ children }) {
+function Modal({ title, children }) {
   //Initialisation-----------------------------------
   //State--------------------------------------------
   //Handlers-----------------------------------------
