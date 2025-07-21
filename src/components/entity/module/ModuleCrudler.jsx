@@ -1,6 +1,5 @@
-import { useState } from "react";
 import useLoad from "../../api/useLoad.js";
-import Modal from "../../UI/Modal.jsx";
+import { useModal, Modal } from "../../UI/Modal.jsx";
 import Action from "../../UI/Actions.jsx";
 import ModuleForm from "./ModuleForm.jsx";
 import { CardContainer } from "../../UI/Card.jsx";
@@ -10,36 +9,30 @@ function ModuleCrudler({ endpoint }) {
   //Initialisation
   //State------------------------------------------------
   const [modules, , loadingMessage, loadModules] = useLoad(endpoint);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, formTitle, openForm, closeForm] = useModal(false);
 
   //Handler----------------------------------------------------
-  const handleAdd = () => setShowForm(true);
-
-  const handleCancel = () => setShowForm(false);
 
   const handleSuccess = async () => {
-    handleCancel();
+    closeForm();
     await loadModules(endpoint);
   };
   //View
+  const addNewModule = "Add new module";
   return (
     <>
-      <Modal title={"Add new module"}>
-        <ModuleForm onCancel={handleCancel} onSuccess={handleSuccess} />
+      <Modal show={showForm} title={formTitle}>
+        <ModuleForm onCancel={closeForm} onSuccess={handleSuccess} />
       </Modal>
 
-      {!showForm && (
-        <Action.Tray>
-          <Action.Add
-            showText
-            buttonText="Add new module"
-            onClick={handleAdd}
-          />
-        </Action.Tray>
-      )}
-      {showForm && (
-        <ModuleForm onCancel={handleCancel} onSuccess={handleSuccess} />
-      )}
+      <Action.Tray>
+        <Action.Add
+          showText
+          buttonText={addNewModule}
+          onClick={() => openForm(addNewModule)}
+        />
+      </Action.Tray>
+
       {!modules ? (
         <p>{loadingMessage}</p>
       ) : modules.length === 0 ? (

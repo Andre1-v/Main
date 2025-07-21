@@ -1,11 +1,12 @@
+import { useState } from "react";
 import "./Modal.scss";
 
-function Modal({ title, children }) {
+export function Modal({ show, title, children }) {
   //Initialisation-----------------------------------
   //State--------------------------------------------
   //Handlers-----------------------------------------
   //View---------------------------------------------
-  return (
+  return show ? (
     <div className="ModalOverlay">
       <div className="ModalPane">
         <header>
@@ -14,7 +15,23 @@ function Modal({ title, children }) {
         <main>{children}</main>
       </div>
     </div>
-  );
+  ) : null;
 }
 
-export default Modal;
+export function useModal(isOpen, initialContent = null) {
+  //Initialisation
+  //State------------------------------------------------
+
+  const [state, setState] = useState({ show: isOpen, content: initialContent });
+
+  //Handler----------------------------------------------------
+  const open = (content) => {
+    setState({ show: true, content: content });
+  };
+
+  const close = () => setState({ ...state, show: false });
+
+  //Return ---------------------------------------
+
+  return [state.show, state.content, open, close];
+}
